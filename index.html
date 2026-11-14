@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio</title>
+<meta name="robots" content="noindex">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Portfolio">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#172033; --muted:#5B6578; --bg:#EEF1F4; --surface:#FFFFFF; --line:#D9DEE6;
+  --gain:#23704A; --loss:#9E2B35; --accent:#3D5A80;
+  --a1:#3D5A80; --a2:#7A9CC6; --a3:#B08D57; --a4:#8A94A6;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#E8ECF2; --muted:#9AA5B8; --bg:#0F1522; --surface:#172033; --line:#2A3550;
+    --gain:#5CC08A; --loss:#E0707A; --accent:#8FB0DA; --a1:#8FB0DA; --a2:#4F7BB5; --a3:#C9A46C; --a4:#6B7488; color-scheme:dark;}
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-variant-numeric:tabular-nums;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:720px;margin:0 auto;padding:20px 18px 40px}
+h1{font:600 15px/1.2 "IBM Plex Sans",sans-serif;color:var(--muted);margin:8px 0 4px}
+.total{font:600 clamp(40px,11vw,64px)/1.05 "Newsreader",Georgia,serif;letter-spacing:-.01em;margin:0}
+.moves{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 22px;color:var(--muted)}
+.moves b{font-weight:600}
+.up{color:var(--gain)} .down{color:var(--loss)}
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line)}
+.bar span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 26px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;color:var(--muted);font:500 14px "IBM Plex Sans",sans-serif;padding:8px 6px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink)}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .name{font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .val{text-align:right;font-weight:500}
+.row .sub{font-size:13px;color:var(--muted)}
+.row .chg{font-size:13px;text-align:right}
+.group{padding:10px 14px 6px;font:600 17px "Newsreader",serif;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+.group:first-child{border-top:0}
+footer{margin-top:22px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+footer button,.empty button{font:500 14px "IBM Plex Sans",sans-serif;color:var(--accent);background:none;border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:22px;margin-top:10px}
+.empty p{margin:0 0 12px;max-width:60ch}
+.note{font-size:13px;color:var(--loss);margin-top:8px}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="asof">Portfolio</h1>
+  <p class="total" id="total">–</p>
+  <div class="moves" id="moves"></div>
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div class="legend" id="legend"></div>
+  <div class="seg" role="group" aria-label="View">
+    <button data-view="holding" aria-pressed="true">Holdings</button>
+    <button data-view="account" aria-pressed="false">Accounts</button>
+    <button data-view="owner" aria-pressed="false">Owners</button>
+  </div>
+  <div id="content"></div>
+  <footer>
+    <span id="updated"></span>
+    <button id="importBtn">Import holdings</button>
+    <button id="exportBtn">Export holdings</button>
+    <input type="file" id="file" accept=".json,application/json" hidden>
+  </footer>
+  <div class="note" id="note" role="status"></div>
+</main>
+<script>
+const KEY='portfolio.holdings.v1';
+const gbp=n=>(n<0?'−':'')+'£'+Math.abs(Math.round(n)).toLocaleString('en-GB');
+const pct=n=>(n>0?'+':n<0?'−':'')+Math.abs(n*100).toFixed(1)+'%';
+const share=n=>(n*100).toFixed(1)+'%';
+const cls=n=>n>0?'up':n<0?'down':'';
+const ACCOUNTS=[['ISA','ISAs'],['SIPP','Pensions'],['GIA','Ordinary accounts'],['other','Private and tax-relief']];
+let data=null, prices=null, view='holding';
+
+function load(){try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){data=null}}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d));data=d}
+
+function toGBP(p,field){
+  const v=p[field]; if(v==null) return null;
+  const fx=prices.fx||{};
+  if(p.cur==='GBp') return v/100;
+  if(p.cur==='GBP') return v;
+  if(p.cur==='USD') return v/(fx['GBPUSD=X']?.[field==='prev'?'prev':'close']||fx['GBPUSD=X']?.close);
+  if(p.cur==='EUR') return v*(fx['EURGBP=X']?.[field==='prev'?'prev':'close']||fx['EURGBP=X']?.close);
+  return null;
+}
+function value(h){
+  const p=h.ticker&&prices?.prices?.[h.ticker];
+  if(p&&h.units!=null){
+    const now=toGBP(p,'close'), prev=toGBP(p,'prev');
+    if(now) return {now:h.units*now, prev:h.units*(prev||now), live:true};
+  }
+  return {now:h.value_29oct, prev:h.value_29oct, live:false};
+}
+function acct(h){return ['ISA','SIPP','GIA'].includes(h.account)?h.account:'other'}
+
+function render(){
+  const c=document.getElementById('content');
+  if(!data){
+    document.getElementById('total').textContent='No holdings yet';
+    document.getElementById('moves').innerHTML='';
+    document.getElementById('bar').innerHTML=''; document.getElementById('legend').innerHTML='';
+    c.innerHTML=`<div class="empty"><p>Your holdings are kept only on this device, never on the website. Import the holdings file Claude gave you to get started.</p><button onclick="document.getElementById('file').click()">Import holdings</button></div>`;
+    return;
+  }
+  const rows=data.holdings.map(h=>({...h,...value(h)}));
+  const tot=rows.reduce((s,r)=>s+r.now,0), prev=rows.reduce((s,r)=>s+r.prev,0), base=rows.reduce((s,r)=>s+r.value_29oct,0);
+  document.getElementById('total').textContent=gbp(tot);
+  const d=tot-prev, b=tot-base;
+  document.getElementById('moves').innerHTML=
+    `<span>Today <b class="${cls(d)}">${gbp(d)} (${pct(d/prev)})</b></span>`+
+    `<span>Since ${new Date(data.baseline).toLocaleDateString('en-GB',{day:'numeric',month:'short'})} <b class="${cls(b)}">${gbp(b)} (${pct(b/base)})</b></span>`;
+  const colours=['var(--a1)','var(--a2)','var(--a3)','var(--a4)'];
+  const byA=ACCOUNTS.map(([k,l],i)=>({k,l,c:colours[i],v:rows.filter(r=>acct(r)===k).reduce((s,r)=>s+r.now,0)})).filter(x=>x.v>0);
+  document.getElementById('bar').innerHTML=byA.map(x=>`<span style="width:${x.v/tot*100}%;background:${x.c}"></span>`).join('');
+  document.getElementById('legend').innerHTML=byA.map(x=>`<span><i style="background:${x.c}"></i>${x.l} ${gbp(x.v)}</span>`).join('');
+  const row=(name,sub,now,chg,ch)=>`<div class="row"><div class="name">${name}</div><div class="val">${gbp(now)}</div><div class="sub">${sub}</div><div class="chg ${cls(chg)}">${ch}</div></div>`;
+  let html='';
+  if(view==='holding'){
+    rows.sort((a,b)=>b.now-a.now);
+    html=rows.map(r=>row(r.name,`${r.owner} · ${r.account}${r.units!=null?` · ${r.units.toLocaleString('en-GB')} units`:''}`,r.now,
+      r.live?r.now-r.prev:0, r.live?`${gbp(r.now-r.prev)} today`:'Fixed value')).join('');
+  } else {
+    const key=view==='account'?r=>ACCOUNTS.find(a=>a[0]===acct(r))[1]:r=>r.owner;
+    const groups={}; rows.forEach(r=>(groups[key(r)]??=[]).push(r));
+    html=Object.entries(groups).sort((a,b)=>b[1].reduce((s,r)=>s+r.now,0)-a[1].reduce((s,r)=>s+r.now,0)).map(([g,rs])=>{
+      const t=rs.reduce((s,r)=>s+r.now,0), dd=rs.reduce((s,r)=>s+r.now-r.prev,0);
+      return `<div class="group"><span>${g}</span><span>${gbp(t)}</span></div>`+
+        rs.sort((a,b)=>b.now-a.now).map(r=>row(r.name,`${view==='account'?r.owner:r.account} · ${share(r.now/t)} of ${g.toLowerCase()}`,r.now,r.live?r.now-r.prev:0,r.live?`${gbp(r.now-r.prev)} today`:'Fixed value')).join('');
+    }).join('');
+  }
+  c.innerHTML=`<div class="list">${html}</div>`;
+  const stale=rows.filter(r=>r.ticker&&!r.live).map(r=>r.name);
+  document.getElementById('note').textContent=stale.length?`No price for: ${stale.join(', ')}. Shown at the 29 Oct value.`:'';
+}
+
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
+  view=b.dataset.view; document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b)); render();});
+document.getElementById('importBtn').onclick=()=>document.getElementById('file').click();
+document.getElementById('file').onchange=async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  try{const d=JSON.parse(await f.text()); if(!Array.isArray(d.holdings)) throw 0; save(d); render();
+    document.getElementById('note').textContent=`Imported ${d.holdings.length} holdings.`;}
+  catch{document.getElementById('note').textContent='That file is not a holdings file. Use the holdings.json Claude produced.';}
+};
+document.getElementById('exportBtn').onclick=()=>{
+  if(!data) return; const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,1)],{type:'application/json'})); a.download='holdings.json'; a.click();};
+
+(async()=>{
+  load();
+  try{prices=await (await fetch('prices.json?'+Date.now(),{cache:'no-store'})).json();
+    document.getElementById('updated').textContent='Prices '+prices.updated;
+    document.getElementById('asof').textContent='Stuart and Reeta, investments';}
+  catch{document.getElementById('note').textContent='Prices could not be loaded. Values shown at 29 Oct.';}
+  render();
+})();
+</script>
+</body>
+</html>
