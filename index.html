@@ -30,19 +30,22 @@
 html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--ink);font:14px/1.4 "IBM Plex Sans",system-ui,-apple-system,sans-serif;
   font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
-button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
 .app{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;height:100dvh;
   padding:max(16px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
-.side{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;scrollbar-width:none}
+.side{display:flex;flex-direction:column;gap:11px;min-height:0;overflow:auto;scrollbar-width:none}
 .side::-webkit-scrollbar{display:none}
 .eyebrow{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--muted);letter-spacing:.02em}
 .eyebrow b{font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase;font-size:11px}
-.total{font:500 52px/1 "Newsreader",Georgia,serif;letter-spacing:-.02em;margin:8px 0 10px}
-.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 11px}
-.chip span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.chip b{display:block;font-weight:600;font-size:15px;margin-top:1px}
-.chip i{font-style:normal;font-size:12px;font-weight:500}
+.total{font:500 48px/1 "Newsreader",Georgia,serif;letter-spacing:-.02em;margin:8px 0 10px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:7px 11px;width:100%}
+.chip span{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.chip b{display:block;font-weight:600;font-size:14.5px;margin-top:1px;white-space:nowrap}
+.chip i{font-style:normal;font-size:11.5px;font-weight:500}
+.chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.since{font-size:12px;color:var(--muted);margin-top:7px}
+.since b{font-weight:600}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 13px}
 .card h2{margin:0 0 7px;font:600 11px/1 "IBM Plex Sans",sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:flex;justify-content:space-between}
 .card h2 em{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--faint)}
@@ -55,7 +58,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .mrow[aria-pressed="true"] .l{font-weight:600}
 .stack{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--line);margin:2px 0 8px}
 .stack span{height:100%}
-.reg{display:grid;grid-template-columns:104px 1fr 38px;align-items:center;gap:8px;font-size:12.5px;padding:2.5px 0}
+.reg{display:grid;grid-template-columns:104px 1fr 38px;align-items:center;gap:8px;font-size:12.5px;padding:1.5px 0}
 .reg .track{height:6px;border-radius:3px;background:var(--soft);overflow:hidden}
 .reg .track span{display:block;height:100%;background:var(--a2);border-radius:3px}
 .reg .p{text-align:right;color:var(--muted);font-size:12px}
@@ -64,16 +67,21 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .tools .sp{flex:1}
 
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.ph{display:flex;align-items:center;gap:12px;padding:12px 16px 10px;border-bottom:1px solid var(--line)}
-.ph h1{margin:0;font:500 22px/1 "Newsreader",Georgia,serif}
-.ph .sum{color:var(--muted);font-size:13px}
+.ph{display:flex;align-items:center;gap:14px;padding:10px 16px 9px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:18px;align-items:baseline}
+.tabs button{font:500 22px/1 "Newsreader",Georgia,serif;color:var(--faint);padding:4px 0;border-bottom:2px solid transparent}
+.tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.ph .sum{color:var(--muted);font-size:12.5px}
 .ph .sp{flex:1}
-.filter{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:3px 6px 3px 10px}
-.filter button{width:18px;height:18px;border-radius:50%;color:var(--muted);line-height:18px}
-.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:2px}
-.seg button{font-size:13px;font-weight:500;color:var(--muted);padding:5px 12px;border-radius:7px}
+.filter{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:3px 6px 3px 10px;white-space:nowrap}
+.filter button{width:18px;height:18px;border-radius:50%;color:var(--muted);line-height:18px;text-align:center}
+.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:2px}
+.seg button{color:var(--muted);padding:4px 12px;border-radius:8px;text-align:center;min-width:72px}
+.seg button b{display:block;font-size:13px;font-weight:500;line-height:1.2}
+.seg button small{display:block;font-size:11.5px;line-height:1.2;color:var(--faint)}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.cols,.hr{display:grid;grid-template-columns:22px minmax(0,1fr) 46px 108px 92px 78px 62px;align-items:center;gap:0 12px;padding:0 16px}
+.seg button[aria-pressed="true"] small{color:var(--muted)}
+.cols,.hr{display:grid;grid-template-columns:22px minmax(0,1fr) 46px 108px 92px 82px 64px;align-items:center;gap:0 12px;padding:0 16px}
 .cols{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);height:28px;border-bottom:1px solid var(--line)}
 .cols .r,.hr .r{text-align:right}
 .cols button{text-transform:inherit;letter-spacing:inherit;font-weight:inherit;color:inherit}
@@ -100,6 +108,27 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .note{font-size:12px;color:var(--muted);padding:6px 16px;border-top:1px solid var(--line)}
 .note:empty{display:none}
 .note.err{color:var(--loss)}
+
+/* by-account page */
+.wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px 14px;align-items:start}
+.wcol{display:flex;flex-direction:column;gap:12px}
+.wb{border:1px solid var(--line);border-radius:12px;padding:10px 12px 6px}
+.wb header{display:flex;justify-content:space-between;align-items:baseline}
+.wb h3{margin:0;font:500 18px/1.1 "Newsreader",Georgia,serif}
+.wb header b{font-weight:600;font-size:15px}
+.split{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--line);margin:7px 0 5px}
+.split span{height:100%}
+.wsum{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.wsum i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
+.wsum b{color:var(--ink);font-weight:600}
+.wr{display:grid;grid-template-columns:minmax(0,1fr) 56px 56px 62px 38px;gap:0 8px;align-items:center;font-size:12.5px;height:22px;border-top:1px solid var(--line)}
+.wr span:not(:first-child){text-align:right}
+.wr .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wr .n small{color:var(--faint);margin-left:5px;font-size:11px}
+.wr.h{font-size:10px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-top:0;height:18px}
+.wr.t{font-weight:600;border-top:1px solid var(--muted)}
+.wr .z{color:var(--faint)}
+.wr .sh{color:var(--muted);font-size:11.5px}
 .empty{padding:28px;max-width:520px}
 .empty h2{font:500 26px "Newsreader",serif;margin:0 0 8px}
 .empty p{color:var(--muted);margin:0 0 16px}
@@ -110,9 +139,11 @@ button:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
 @media (max-width:980px){
   .app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:12px}
   .side{overflow:visible;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .side .head{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:0 18px;align-items:end}
+  .side .head{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:0 18px;align-items:center}
   .side .head .eyebrow{grid-column:1/-1}
-  .side .head .total{margin:6px 0 0;font-size:46px}
+  .side .head .total{margin:6px 0 0;font-size:44px}
+  .chips{grid-template-columns:repeat(4,1fr)}
+  .since{grid-column:2}
   #accounts{grid-column:1;grid-row:2} #owners{grid-column:1;grid-row:3} #regions{grid-column:2;grid-row:2/4}
   .tools{grid-column:1/-1;padding-top:0}
   .card{padding:9px 12px} .mrow{padding:3px 4px}
@@ -121,11 +152,11 @@ button:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
   .app{height:auto;min-height:100dvh;grid-template-rows:auto auto}
   .side{grid-template-columns:1fr}
   .side .head{display:block}
+  .chips{grid-template-columns:1fr 1fr}
   #accounts,#owners,#regions{grid-column:auto;grid-row:auto}
   .panel{min-height:auto} .body{overflow:visible}
   .cols,.hr{grid-template-columns:20px minmax(0,1fr) 84px 64px;gap:0 8px}
   .cols>:nth-child(3),.hr>:nth-child(3),.cols>:nth-child(4),.hr>:nth-child(4),.cols>:nth-child(7),.hr>:nth-child(7){display:none}
-  .total{font-size:44px}
   .ph{flex-wrap:wrap}
 }
 </style>
@@ -136,7 +167,10 @@ button:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
     <div class="head">
       <div class="eyebrow"><b>Stuart &amp; Reeta</b><span id="asof">Loading prices…</span></div>
       <div class="total" id="total">–</div>
-      <div class="chips" id="chips"></div>
+      <div>
+        <div class="chips" id="chips" role="group" aria-label="Period"></div>
+        <div class="since" id="since"></div>
+      </div>
     </div>
     <section class="card" id="accounts"></section>
     <section class="card" id="owners"></section>
@@ -150,18 +184,18 @@ button:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
 
   <main class="panel">
     <div class="ph">
-      <h1>Holdings</h1><span class="sum" id="psum"></span><span id="fchip"></span>
-      <span class="sp"></span>
-      <div class="seg" role="group" aria-label="Owner">
-        <button data-owner="" aria-pressed="true">All</button>
-        <button data-owner="Stuart" aria-pressed="false">Stuart</button>
-        <button data-owner="Reeta" aria-pressed="false">Reeta</button>
+      <div class="tabs" role="group" aria-label="Page">
+        <button data-page="holdings" aria-pressed="true">Holdings</button>
+        <button data-page="acct" aria-pressed="false">By account</button>
       </div>
+      <span class="sum" id="psum"></span><span id="fchip"></span>
+      <span class="sp"></span>
+      <div class="seg" role="group" aria-label="Owner" id="ownerSeg"></div>
     </div>
     <div class="cols" id="cols">
       <span></span><span>Holding</span><span>Acct</span><span>Weight</span>
       <button class="r" data-sort="value" aria-pressed="true">Value</button>
-      <button class="r" data-sort="day" aria-pressed="false" id="dayHead">Day</button>
+      <button class="r" data-sort="move" aria-pressed="false" id="moveHead">Day</button>
       <span class="r">%</span>
     </div>
     <div class="body" id="body"></div>
@@ -179,37 +213,49 @@ const share=n=>(n*100).toFixed(n<.1?1:0)+'%';
 const cls=n=>Math.abs(n)<0.5?'flat':n>0?'up':'down';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ACCOUNTS=[['ISA','ISAs','var(--a1)'],['SIPP','Pensions','var(--a2)'],['GIA','Ordinary','var(--a3)'],['other','Private & tax-relief','var(--a4)']];
-let data=null, prices=null, owner='', account='', sort='value';
+const PERIODS=[['day','prev'],['week','w'],['month','m'],['year','y']];
+let data=null, prices=null, owner='', account='', sort='value', period='day', page='holdings';
+try{period=localStorage.getItem('portfolio.period')||'day'; page=localStorage.getItem('portfolio.page')||'holdings'}catch(e){}
+if(!['holdings','acct'].includes(page)) page='holdings';
 
 function load(){try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){data=null}}
 function save(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){} data=d}
+function remember(k,v){try{localStorage.setItem('portfolio.'+k,v)}catch(e){}}
 
 function toGBP(p,field){
   const v=p[field]; if(v==null) return null;
   const fx=prices.fx||{};
+  const r=s=>fx[s]?.[field]??fx[s]?.close;
   if(p.cur==='GBp') return v/100;
   if(p.cur==='GBP') return v;
-  if(p.cur==='USD') return v/(fx['GBPUSD=X']?.[field==='prev'?'prev':'close']||fx['GBPUSD=X']?.close);
-  if(p.cur==='EUR') return v*(fx['EURGBP=X']?.[field==='prev'?'prev':'close']||fx['EURGBP=X']?.close);
+  if(p.cur==='USD') return v/r('GBPUSD=X');
+  if(p.cur==='EUR') return v*r('EURGBP=X');
   return null;
 }
 function value(h){
   const p=h.ticker&&prices?.prices?.[h.ticker];
+  const out={now:h.value_29oct, live:false, base:{}};
   if(p&&h.units!=null){
-    const now=toGBP(p,'close'), prev=toGBP(p,'prev');
-    if(now) return {now:h.units*now, prev:h.units*(prev||now), live:true};
+    const now=toGBP(p,'close');
+    if(now){out.now=h.units*now; out.live=true;
+      PERIODS.forEach(([k,f])=>{const b=toGBP(p,f); out.base[k]=b?h.units*b:null;});}
   }
-  return {now:h.value_29oct, prev:h.value_29oct, live:false};
+  return out;
 }
+const mv=(r,k)=>r.live&&r.base[k]!=null?r.now-r.base[k]:null;
 const acct=h=>['ISA','SIPP','GIA'].includes(h.account)?h.account:'other';
 const short=n=>{const m=n.match(/\(([^)]+)\)\s*$/);const base=n.replace(/\s*\([^)]*\)\s*$/,'');return {base,code:m?m[1].replace(/ price$/,''):''}};
+const sum=(rs,f)=>rs.reduce((s,r)=>s+(f(r)||0),0);
 
-function tradeLabel(){
-  if(!prices?.prices) return 'Day';
+function lastDate(){
+  if(!prices?.prices) return null;
   const ds=Object.values(prices.prices).map(p=>p.date).filter(Boolean).sort();
-  const d=ds[ds.length-1]; if(!d) return 'Day';
-  const dt=new Date(d+'T12:00:00'), today=new Date();
-  if(dt.toDateString()===today.toDateString()) return 'Today';
+  return ds.length?new Date(ds[ds.length-1]+'T12:00:00'):null;
+}
+function periodLabel(k){
+  if(k==='week') return 'Week'; if(k==='month') return 'Month'; if(k==='year') return 'Year';
+  const dt=lastDate(); if(!dt) return 'Day';
+  if(dt.toDateString()===new Date().toDateString()) return 'Today';
   return dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 }
 
@@ -222,30 +268,31 @@ function sizeRows(){
 
 function render(){
   const body=document.getElementById('body');
+  document.querySelectorAll('[data-page]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.page===page));
   if(!data){
     document.getElementById('total').textContent='–';
-    ['chips','accounts','owners','regions','psum','fchip','count'].forEach(id=>document.getElementById(id).innerHTML='');
+    ['chips','since','accounts','owners','regions','psum','fchip','count','ownerSeg'].forEach(id=>document.getElementById(id).innerHTML='');
     ['accounts','owners','regions','cols'].forEach(id=>document.getElementById(id).style.display='none');
     body.innerHTML=`<div class="empty"><h2>No holdings yet</h2><p>Your holdings are kept only on this device, never on the website. Paste or import the holdings file Claude gave you.</p><button class="btn" onclick="pasteHoldings()">Paste holdings</button><button class="btn" onclick="document.getElementById('file').click()">Import file</button></div>`;
     return;
   }
-  ['accounts','owners','regions','cols'].forEach(id=>document.getElementById(id).style.display='');
-  const day=tradeLabel();
+  ['accounts','owners','regions'].forEach(id=>document.getElementById(id).style.display='');
   const rows=data.holdings.map(h=>({...h,...value(h)}));
-  const sum=(rs,f)=>rs.reduce((s,r)=>s+f(r),0);
-  const tot=sum(rows,r=>r.now), prev=sum(rows,r=>r.prev), base=sum(rows,r=>r.value_29oct);
+  const tot=sum(rows,r=>r.now), base29=sum(rows,r=>r.value_29oct);
+
   document.getElementById('total').textContent=gbp(tot);
-  const d=tot-prev, b=tot-base;
-  const since=new Date(data.baseline).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-  document.getElementById('chips').innerHTML=
-    `<div class="chip"><span>${esc(day)}</span><b class="${cls(d)}">${gbp(d)} <i>${pct(d/prev)}</i></b></div>`+
-    `<div class="chip"><span>Since ${since}</span><b class="${cls(b)}">${gbp(b)} <i>${pct(b/base)}</i></b></div>`;
+  document.getElementById('chips').innerHTML=PERIODS.map(([k])=>{
+    const m=sum(rows,r=>mv(r,k)), b=sum(rows.filter(r=>mv(r,k)!=null),r=>r.base[k]);
+    return `<button class="chip" data-period="${k}" aria-pressed="${period===k}"><span>${esc(periodLabel(k))}</span><b class="${cls(m)}">${gbp(m)} <i>${b?pct(m/b):''}</i></b></button>`;}).join('');
+  document.querySelectorAll('[data-period]').forEach(el=>el.onclick=()=>{period=el.dataset.period;remember('period',period);render()});
+  const since=new Date(data.baseline).toLocaleDateString('en-GB',{day:'numeric',month:'short'}), sb=tot-base29;
+  document.getElementById('since').innerHTML=`Since ${since} <b class="${cls(sb)}">${gbp(sb)} (${pct(sb/base29)})</b>`;
 
   const byA=ACCOUNTS.map(([k,l,c])=>({k,l,c,v:sum(rows.filter(r=>acct(r)===k),r=>r.now)})).filter(x=>x.v>0);
   document.getElementById('accounts').innerHTML=`<h2>Where it sits <em>tap to filter</em></h2>
     <div class="stack">${byA.map(x=>`<span style="width:${x.v/tot*100}%;background:${x.c}"></span>`).join('')}</div>`+
     byA.map(x=>`<button class="mrow" data-acct="${x.k}" aria-pressed="${account===x.k}"><span class="dot" style="background:${x.c}"></span><span class="l">${x.l}</span><span class="v">${gbp(x.v)}</span><span class="p">${share(x.v/tot)}</span></button>`).join('');
-  document.querySelectorAll('[data-acct]').forEach(el=>el.onclick=()=>{account=account===el.dataset.acct?'':el.dataset.acct;render()});
+  document.querySelectorAll('[data-acct]').forEach(el=>el.onclick=()=>{account=account===el.dataset.acct?'':el.dataset.acct;page='holdings';render()});
 
   const byO=['Stuart','Reeta'].map(o=>({o,v:sum(rows.filter(r=>r.owner===o),r=>r.now)}));
   document.getElementById('owners').innerHTML=`<h2>Who owns it</h2>
@@ -259,34 +306,65 @@ function render(){
   document.getElementById('regions').innerHTML=`<h2>Shares by region <em>${gbpk(lt)}</em></h2>`+
     rl.map(([k,v])=>`<div class="reg"><span>${esc(k.replace('Emerging Markets','Emerging mkts'))}</span><span class="track"><span style="width:${v/mx*100}%"></span></span><span class="p">${share(v/lt)}</span></div>`).join('');
 
+  // owner buttons with totals
+  document.getElementById('ownerSeg').innerHTML=[['','All'],['Stuart','Stuart'],['Reeta','Reeta']].map(([k,l])=>
+    `<button data-owner="${k}" aria-pressed="${owner===k}"><b>${l}</b><small>${gbpk(sum(rows.filter(r=>!k||r.owner===k),r=>r.now))}</small></button>`).join('');
+  document.querySelectorAll('[data-owner]').forEach(b=>b.onclick=()=>{owner=b.dataset.owner;render()});
+
+  document.getElementById('count').textContent=`${rows.length} holdings`;
+  document.getElementById('ownerSeg').style.display=page==='holdings'?'':'none';
+  if(page==='acct'){renderWrappers(rows);return}
+
+  document.getElementById('cols').style.display='';
   const view=rows.filter(r=>(!owner||r.owner===owner)&&(!account||acct(r)===account));
-  const vt=sum(view,r=>r.now), vd=sum(view,r=>r.now-r.prev);
-  view.sort(sort==='day'?(a,b)=>(a.now-a.prev)-(b.now-b.prev):(a,b)=>b.now-a.now);
+  const vm=sum(view,r=>mv(r,period));
+  view.sort(sort==='move'?(a,b)=>(mv(a,period)??0)-(mv(b,period)??0):(a,b)=>b.now-a.now);
   const maxw=Math.max(...view.map(r=>r.now/tot),1e-9);
-  document.getElementById('dayHead').textContent=day;
-  document.getElementById('psum').innerHTML=`${view.length} · ${gbp(vt)} · <span class="${cls(vd)}">${gbp(vd)}</span>`;
+  document.getElementById('moveHead').textContent=periodLabel(period);
+  document.getElementById('psum').innerHTML=`${view.length} · ${periodLabel(period).toLowerCase()} <span class="${cls(vm)}">${gbp(vm)}</span>`;
   const al=ACCOUNTS.find(a=>a[0]===account);
   document.getElementById('fchip').innerHTML=al?`<span class="filter">${al[1]}<button aria-label="Clear filter" onclick="account='';render()">×</button></span>`:'';
   body.innerHTML=view.map(r=>{
-    const s=short(r.name), dd=r.live?r.now-r.prev:0, dp=r.live&&r.prev?dd/r.prev:0;
+    const s=short(r.name), m=mv(r,period), p=m!=null&&r.base[period]?m/r.base[period]:null;
     return `<div class="hr"><span class="own ${r.owner}" title="${r.owner}">${r.owner[0]}</span>
       <span class="nm">${esc(s.base)}${s.code?`<small>${esc(s.code)}</small>`:''}</span>
       <span class="tag">${esc(r.account==='Direct LP'?'LP':r.account)}</span>
       <span class="w"><span class="t"><span style="width:${r.now/tot/maxw*100}%"></span></span><em>${share(r.now/tot)}</em></span>
       <span class="r val">${gbp(r.now)}</span>
-      <span class="r ${r.live?cls(dd):'flat'}">${r.live?gbp(dd):'fixed'}</span>
-      <span class="pill ${r.live?cls(dd):'flat'}">${r.live?pct2(dp):'–'}</span></div>`;}).join('');
-  document.getElementById('count').textContent=`${rows.length} holdings`;
+      <span class="r ${m==null?'flat':cls(m)}">${m==null?(r.live?'–':'fixed'):gbp(m)}</span>
+      <span class="pill ${p==null?'flat':cls(m)}">${p==null?'–':pct2(p)}</span></div>`;}).join('');
   const stale=rows.filter(r=>r.ticker&&!r.live).map(r=>short(r.name).code||r.name);
   const n=document.getElementById('note');
-  if(!n.classList.contains('err')&&!n.dataset.hold) n.textContent=stale.length?`No price for ${stale.join(', ')}; shown at ${since} value.`:'';
+  if(!n.dataset.hold) n.textContent=stale.length?`No price for ${stale.join(', ')}; shown at ${since} value.`:'';
   requestAnimationFrame(sizeRows);
 }
 
-document.querySelectorAll('[data-owner]').forEach(b=>b.onclick=()=>{
-  owner=b.dataset.owner; document.querySelectorAll('[data-owner]').forEach(x=>x.setAttribute('aria-pressed',x===b)); render();});
+function renderWrappers(rows){
+  document.getElementById('cols').style.display='none'; document.getElementById('fchip').innerHTML='';
+  document.getElementById('psum').textContent='Stuart and Reeta by value and share';
+  const G=[['SIPP','Pensions'],['ISA','ISAs'],['GIA','Ordinary accounts'],['other','Private & tax-relief']];
+  const cell=v=>v>0.5?`<span>${gbpk(v)}</span>`:`<span class="z">–</span>`;
+  const tidy=n=>n.replace(/^(Vanguard|Xtrackers|iShares Core|iShares)\s+/,'').replace(/ Index Unit Trust/,'').replace(/^FTSE Dev /,'Dev ').replace(/ holdings$/,'');
+  const all=sum(rows,r=>r.now);
+  const sec=([k,label])=>{
+    const rs=rows.filter(r=>acct(r)===k); if(!rs.length) return '';
+    const agg={};
+    rs.forEach(r=>{const key=r.ticker||r.name;const a=agg[key]??={name:r.name,S:0,R:0};a[r.owner==='Reeta'?'R':'S']+=r.now;});
+    const list=Object.values(agg).map(a=>({...a,T:a.S+a.R})).sort((a,b)=>b.T-a.T);
+    const S=sum(list,a=>a.S), R=sum(list,a=>a.R), T=S+R;
+    return `<section class="wb"><header><h3>${label}</h3><b>${gbp(T)}</b></header>
+      <div class="split"><span style="width:${S/T*100}%;background:var(--stuart)"></span><span style="width:${R/T*100}%;background:var(--reeta)"></span></div>
+      <div class="wsum"><span><i style="background:var(--stuart)"></i>Stuart <b>${gbp(S)}</b> · ${share(S/T)}</span><span><i style="background:var(--reeta)"></i>Reeta <b>${gbp(R)}</b> · ${share(R/T)}</span></div>
+      <div class="wr h"><span>Holding</span><span>Stuart</span><span>Reeta</span><span>Total</span><span>Share</span></div>
+      ${list.map(a=>{const sh=short(a.name);return `<div class="wr"><span class="n">${esc(tidy(sh.base))}${sh.code?`<small>${esc(sh.code)}</small>`:''}</span>${cell(a.S)}${cell(a.R)}<span><b>${gbpk(a.T)}</b></span><span class="sh">${share(a.T/T)}</span></div>`}).join('')}
+      <div class="wr t"><span>Total</span>${cell(S)}${cell(R)}<span>${gbpk(T)}</span><span class="sh">${share(T/all)}</span></div>
+    </section>`;};
+  document.getElementById('body').innerHTML=`<div class="wrap"><div class="wcol">${sec(G[0])}${sec(G[3])}</div><div class="wcol">${sec(G[1])}${sec(G[2])}</div></div>`;
+  document.getElementById('note').textContent='Share column: each holding as a share of that account type. Total row: the account type as a share of everything.';
+}
 document.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{
   sort=b.dataset.sort; document.querySelectorAll('[data-sort]').forEach(x=>x.setAttribute('aria-pressed',x===b)); render();});
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{page=b.dataset.page;remember('page',page);render()});
 window.addEventListener('resize',sizeRows);
 
 function note(msg,err){const n=document.getElementById('note');n.textContent=msg;n.classList.toggle('err',!!err);n.dataset.hold='1';
@@ -301,9 +379,10 @@ function useHoldings(t){
   catch{note('That is not a holdings file. Use the holdings.json Claude produced.',true);}}
 async function pasteHoldings(){
   try{const t=await navigator.clipboard.readText(); if(t&&t.includes('holdings')) return useHoldings(t);}catch{}
+  page='holdings'; render();
   let box=document.getElementById('pasteBox');
   if(!box){box=document.createElement('textarea');box.id='pasteBox';box.placeholder='Press and hold here, then tap Paste';
-    (document.querySelector('.empty')||document.getElementById('body')).appendChild(box);}
+    (document.querySelector('.empty')||document.getElementById('body')).prepend(box);}
   box.focus(); box.oninput=()=>{if(box.value.trim().endsWith('}')) useHoldings(box.value);};}
 document.getElementById('pasteBtn').onclick=pasteHoldings;
 document.getElementById('importBtn').onclick=()=>document.getElementById('file').click();
