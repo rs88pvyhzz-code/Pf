@@ -75,7 +75,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <span id="updated"></span>
     <button id="importBtn">Import holdings</button>
     <button id="exportBtn">Export holdings</button>
-    <input type="file" id="file" accept=".json,application/json" hidden>
+    <button id="pasteBtn">Paste holdings</button>
+    <input type="file" id="file" hidden>
   </footer>
   <div class="note" id="note" role="status"></div>
 </main>
@@ -116,7 +117,7 @@ function render(){
     document.getElementById('total').textContent='No holdings yet';
     document.getElementById('moves').innerHTML='';
     document.getElementById('bar').innerHTML=''; document.getElementById('legend').innerHTML='';
-    c.innerHTML=`<div class="empty"><p>Your holdings are kept only on this device, never on the website. Import the holdings file Claude gave you to get started.</p><button onclick="document.getElementById('file').click()">Import holdings</button></div>`;
+    c.innerHTML=`<div class="empty"><p>Your holdings are kept only on this device, never on the website. Import the holdings file Claude gave you to get started.</p><button onclick="document.getElementById('file').click()">Import holdings</button> <button onclick="pasteHoldings()">Paste holdings</button></div><textarea id="pasteBox" placeholder="Or paste the holdings text here" style="width:100%;min-height:120px;margin-top:12px;font:13px monospace;display:none"></textarea>`;
     return;
   }
   const rows=data.holdings.map(h=>({...h,...value(h)}));
@@ -153,12 +154,24 @@ function render(){
 document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
   view=b.dataset.view; document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b)); render();});
 document.getElementById('importBtn').onclick=()=>document.getElementById('file').click();
-document.getElementById('file').onchange=async e=>{
-  const f=e.target.files[0]; if(!f) return;
-  try{const d=JSON.parse(await f.text()); if(!Array.isArray(d.holdings)) throw 0; save(d); render();
+function parseHoldings(t){
+  t=String(t||'');
+  if(/&quot;|<\w/.test(t)){const doc=new DOMParser().parseFromString(t,'text/html'); t=doc.body?doc.body.textContent:t;}
+  const a=t.indexOf('{'), b=t.lastIndexOf('}'); if(a<0||b<=a) throw 0;
+  const d=JSON.parse(t.slice(a,b+1)); if(!Array.isArray(d.holdings)) throw 0; return d;}
+function useHoldings(t){
+  try{const d=parseHoldings(t); save(d); render();
     document.getElementById('note').textContent=`Imported ${d.holdings.length} holdings.`;}
-  catch{document.getElementById('note').textContent='That file is not a holdings file. Use the holdings.json Claude produced.';}
-};
+  catch{document.getElementById('note').textContent='That is not a holdings file. Use the holdings.json Claude produced.';}}
+async function pasteHoldings(){
+  try{const t=await navigator.clipboard.readText(); if(t&&t.includes('holdings')) return useHoldings(t);}catch{}
+  let box=document.getElementById('pasteBox');
+  if(!box){box=document.createElement('textarea');box.id='pasteBox';box.style.cssText='width:100%;min-height:120px;margin-top:12px;font:13px monospace';document.getElementById('note').before(box);}
+  box.style.display='block'; box.placeholder='Paste the holdings text here'; box.focus();
+  box.oninput=()=>{if(box.value.trim().endsWith('}')) useHoldings(box.value);};}
+document.getElementById('pasteBtn').onclick=pasteHoldings;
+document.getElementById('file').onchange=async e=>{
+  const f=e.target.files[0]; if(!f) return; useHoldings(await f.text()); e.target.value='';};
 document.getElementById('exportBtn').onclick=()=>{
   if(!data) return; const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,1)],{type:'application/json'})); a.download='holdings.json'; a.click();};
