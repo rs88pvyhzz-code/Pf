@@ -333,7 +333,7 @@ function render(){
   document.getElementById('total').textContent=gbp(tot);
   document.getElementById('chips').innerHTML=PERIODS.map(([k])=>{
     const m=sum(rows,r=>mv(r,k)), b=sum(rows.filter(r=>mv(r,k)!=null),r=>r.base[k]);
-    return `<button class="chip" data-period="${k}" aria-pressed="${period===k}"><span>${esc(periodLabel(k))}</span><b class="${cls(m)}">${gbp(m)} <i>${b?pct(m/b):''}</i></b></button>`;}).join('');
+    return `<button class="chip" data-period="${k}" aria-pressed="${period===k}"><span>${esc(periodLabel(k))}</span>${b?`<b class="${cls(m)}">${gbp(m)} <i>${pct(m/b)}</i></b>`:'<b class="flat">waiting for data</b>'}</button>`;}).join('');
   document.querySelectorAll('[data-period]').forEach(el=>el.onclick=()=>{period=el.dataset.period;remember('period',period);render()});
   const since=new Date(data.baseline).toLocaleDateString('en-GB',{day:'numeric',month:'short'}), sb=tot-base29;
   document.getElementById('since').innerHTML=`Since ${since} <b class="${cls(sb)}">${gbp(sb)} (${pct(sb/base29)})</b>`;
@@ -391,6 +391,7 @@ function render(){
 }
 
 function renderCash(){
+  document.getElementById('note').textContent='';
   document.getElementById('cols').style.display='none'; document.getElementById('fchip').innerHTML='';
   document.getElementById('psum').textContent='Savings and what to do';
   const C=(data.cash||[]).filter(c=>c.type!=='current'); const body=document.getElementById('body');
