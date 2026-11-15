@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-14 22:26 UTC",
+ "updated": "2026-11-15 14:37 UTC",
  "prices": {
   "CSPX.L": {
    "cur": "USD",
@@ -137,9 +137,9 @@
  "fx": {
   "GBPUSD=X": {
    "cur": "USD",
-   "close": 1.323136,
-   "prev": 1.327669,
-   "date": "2026-11-13"
+   "close": 1.321213,
+   "prev": 1.323136,
+   "date": "2026-11-15"
   },
   "EURGBP=X": {
    "cur": "GBP",
