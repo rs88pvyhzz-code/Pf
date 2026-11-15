@@ -1,0 +1,42 @@
+{
+ "asof": "2026-11-15",
+ "source": "DepositScout and Be Clever With Your Cash, checked 15 Nov 2026. FSCS-protected UK banks only; Sharia and non-FSCS products excluded.",
+ "categories": {
+  "instant": [
+   {
+    "provider": "Monument",
+    "rate": 0.0456,
+    "note": "Monument Welcome Saver \u00b7 FSCS \u00b7 \u00a325,000 minimum"
+   },
+   {
+    "provider": "Zopa",
+    "rate": 0.0456,
+    "note": "Zopa Limited Access \u00b7 FSCS \u00b7 max 3 withdrawals a year"
+   }
+  ],
+  "1y": [
+   {
+    "provider": "OakNorth",
+    "rate": 0.0519,
+    "note": "FSCS \u00b7 interest at maturity"
+   },
+   {
+    "provider": "Castle Trust",
+    "rate": 0.0519,
+    "note": "Castle Trust Bank \u00b7 FSCS \u00b7 \u00a31,000 min"
+   }
+  ],
+  "2y": [
+   {
+    "provider": "Afin",
+    "rate": 0.053,
+    "note": "Afin Bank \u00b7 FSCS \u00b7 \u00a31,000 min"
+   },
+   {
+    "provider": "OakNorth",
+    "rate": 0.053,
+    "note": "FSCS"
+   }
+  ]
+ }
+}

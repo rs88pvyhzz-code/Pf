@@ -129,6 +129,55 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .wr.t{font-weight:600;border-top:1px solid var(--muted)}
 .wr .z{color:var(--faint)}
 .wr .sh{color:var(--muted);font-size:11.5px}
+/* cash page */
+.cash{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:10px;padding:10px 14px;align-items:start}
+.kpis{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:6px 12px}
+.kpi span{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi b{display:block;font:500 20px/1.2 "Newsreader",Georgia,serif}
+.kpi small{color:var(--muted);font-size:11.5px}
+.cb{border:1px solid var(--line);border-radius:12px;padding:10px 12px 6px}
+.cb h3{margin:0 0 6px;font:500 17px/1.1 "Newsreader",Georgia,serif;display:flex;justify-content:space-between;align-items:baseline}
+.cb h3 em{font:400 11.5px "IBM Plex Sans",sans-serif;color:var(--muted);font-style:normal}
+.cr{display:grid;gap:0 8px;align-items:center;font-size:12.5px;min-height:24px;border-top:1px solid var(--line)}
+.cr.h{font-size:10px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-top:0;min-height:18px}
+.cr span:not(:first-child){text-align:right}
+.cr .n{text-align:left!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr .n small{color:var(--faint);margin-left:5px;font-size:11px}
+.acc .cr{grid-template-columns:minmax(0,1fr) 50px 80px 118px;min-height:25px}
+.acc .cr small{color:var(--faint);font-size:11px;margin-left:4px}
+.acc .cr.g{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;min-height:22px;border-top:1px solid var(--line);background:var(--soft);margin:0 -12px;padding:0 12px}
+.acc .cr.g span:nth-child(3){font-size:12px;letter-spacing:0;color:var(--ink)}
+.od{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;position:relative;top:-1px}
+.cb h3 em .od{margin:0 4px 0 8px}
+.red .cr{grid-template-columns:76px minmax(0,1fr) 76px 64px}
+.best .cr{grid-template-columns:minmax(0,1fr) 50px}
+.best .cat{font-size:10px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;padding:0 0 1px;border-top:1px solid var(--line)}
+.best .cat:first-of-type{border-top:0;padding-top:0}
+.best .cr{border-top:0;min-height:19px;grid-template-columns:minmax(0,1fr) 44px}
+.best .cr .n small{margin-left:6px;font-size:10.5px}
+.soon{color:var(--loss);font-weight:600}
+.gap{font-size:11.5px}
+.ccol{display:flex;flex-direction:column;gap:10px}
+.rec .rh{font-size:10px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 2px}
+.rec .rh+.rr{border-top:0}
+.rr{padding:5px 0;border-top:1px solid var(--line);font-size:12.5px;line-height:1.35}
+.rr .rk{font-weight:600}
+.rr .tg{margin-right:6px;position:relative;top:-1px}
+.rr .rk small{font-weight:400;color:var(--muted);font-size:11.5px}
+.rr .ra{color:var(--ink)}
+.rr .ra b{font-weight:600}
+.tg{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:1px 5px}
+.tg.stay{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+.tg.move{background:var(--gain-bg);color:var(--gain)}
+.tg.soon{background:#FBF1DC;color:#8A6416}
+.tg.keep{background:var(--gain-bg);color:var(--gain)}
+.tg.wait{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+@media (prefers-color-scheme:dark){.tg.soon{background:#3A3018;color:#E2BE6E}}
+.mut{color:var(--muted);font-size:11.5px}
+.rule{margin:6px 0 2px;font-size:11.5px;color:var(--muted)}
+.bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
+.bgrid .cat{border-top:0;padding-top:0}
 .empty{padding:28px;max-width:520px}
 .empty h2{font:500 26px "Newsreader",serif;margin:0 0 8px}
 .empty p{color:var(--muted);margin:0 0 16px}
@@ -187,6 +236,7 @@ button:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
       <div class="tabs" role="group" aria-label="Page">
         <button data-page="holdings" aria-pressed="true">Holdings</button>
         <button data-page="acct" aria-pressed="false">By account</button>
+        <button data-page="cash" aria-pressed="false">Cash</button>
       </div>
       <span class="sum" id="psum"></span><span id="fchip"></span>
       <span class="sp"></span>
@@ -214,9 +264,9 @@ const cls=n=>Math.abs(n)<0.5?'flat':n>0?'up':'down';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ACCOUNTS=[['ISA','ISAs','var(--a1)'],['SIPP','Pensions','var(--a2)'],['GIA','Ordinary','var(--a3)'],['other','Private & tax-relief','var(--a4)']];
 const PERIODS=[['day','prev'],['week','w'],['month','m'],['year','y']];
-let data=null, prices=null, owner='', account='', sort='value', period='day', page='holdings';
+let rates=null, data=null, prices=null, owner='', account='', sort='value', period='day', page='holdings';
 try{period=localStorage.getItem('portfolio.period')||'day'; page=localStorage.getItem('portfolio.page')||'holdings'}catch(e){}
-if(!['holdings','acct'].includes(page)) page='holdings';
+if(!['holdings','acct','cash'].includes(page)) page='holdings';
 
 function load(){try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){data=null}}
 function save(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){} data=d}
@@ -314,6 +364,7 @@ function render(){
   document.getElementById('count').textContent=`${rows.length} holdings`;
   document.getElementById('ownerSeg').style.display=page==='holdings'?'':'none';
   if(page==='acct'){renderWrappers(rows);return}
+  if(page==='cash'){renderCash();return}
 
   document.getElementById('cols').style.display='';
   const view=rows.filter(r=>(!owner||r.owner===owner)&&(!account||acct(r)===account));
@@ -339,6 +390,67 @@ function render(){
   requestAnimationFrame(sizeRows);
 }
 
+function renderCash(){
+  document.getElementById('cols').style.display='none'; document.getElementById('fchip').innerHTML='';
+  document.getElementById('psum').textContent='Savings and what to do';
+  const C=(data.cash||[]).filter(c=>c.type!=='current'); const body=document.getElementById('body');
+  if(!C.length){body.innerHTML='<div class="empty"><h2>No cash recorded</h2><p>Paste the latest holdings file from Claude; it carries the cash accounts.</p></div>';return}
+  const today=new Date(); today.setHours(0,0,0,0);
+  const dd=s=>s?Math.round((new Date(s+'T00:00:00')-today)/864e5):null;
+  const fmtD=s=>new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
+  const pc=r=>(r*100).toFixed(2)+'%';
+  const tot=sum(C,c=>c.balance), inst=sum(C.filter(c=>!c.free),c=>c.balance), lock=tot-inst;
+  const intr=sum(C,c=>c.balance*(c.rate||0)), wr=intr/tot;
+  const R=rates?.categories||{}, bi=R.instant?.[0], b1=R['1y']?.[0];
+  const SWITCH_MIN=250, tr=o=>o==='Stuart'?(data.settings?.stuart_tax_rate??0.45):(data.settings?.reeta_tax_rate??0.20);
+  const kpi=(l,v,s)=>`<div class="kpi"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
+
+  // one table: available now, then locked by date
+  const shown=C.filter(c=>c.balance>=1000);
+  const now=shown.filter(c=>!c.free).sort((a,b)=>b.balance-a.balance), later=shown.filter(c=>c.free).sort((a,b)=>a.free.localeCompare(b.free));
+  const row=c=>{const d=dd(c.free); const soon=c.free&&d<=45;
+    const av=!c.free?'<span class="z">now</span>':`<span class="${soon?'soon':''}">${fmtD(c.free)} <small>${d<0?'due':d<=60?d+' days':Math.round(d/30.4)+' mths'}</small></span>`;
+    return `<div class="cr"><span class="n"><i class="od" style="background:var(--${c.owner.toLowerCase()})"></i>${esc(c.name.replace('Cahoot Sunny Day Saver','Sunny Day Saver').replace('Marcus 1-year fixed','Marcus fixed'))}</span><span>${c.rate!=null?pc(c.rate):'?'}</span><span><b>${gbp(c.balance)}</b></span>${av}</div>`};
+  const sub=(l,f)=>`<div class="cr g"><span>${l}</span><span></span><span>${gbp(sum(C.filter(f),c=>c.balance))}</span><span></span></div>`;
+  const accRows=sub('Available now',c=>!c.free)+now.map(row).join('')+sub('Locked',c=>!!c.free)+later.map(row).join('');
+  const best=[['instant','Instant'],['1y','1-year fixed'],['2y','2-year fixed']].map(([k,l])=>`<div class="bc"><div class="cat">${l}</div>`+(R[k]||[]).slice(0,2).map(x=>`<div class="cr" title="${esc(x.note||'')}"><span class="n">${esc(x.provider)}</span><span><b>${pc(x.rate)}</b></span></div>`).join('')+'</div>').join('');
+
+  // recommendations
+  const net=(r,o)=>r*(1-tr(o));
+  const nm=[];
+  if(bi) nm.push(`<div class="rr">Needed within a year → <b>${esc(bi.provider)}</b> ${pc(bi.rate)} <small class="mut">(${pc(net(bi.rate,'Reeta'))} after tax)</small></div>`);
+  if(b1) nm.push(`<div class="rr">Not needed for a year → <b>${esc(b1.provider)} 1-year fix</b> ${pc(b1.rate)} <small class="mut">(${pc(net(b1.rate,'Reeta'))} after tax)</small></div>`);
+  const ex=[]; const L=C.filter(c=>c.balance>2000&&c.type!=='current').sort((a,b)=>b.balance-a.balance);
+  const item=(tag,title,act)=>`<div class="rr"><div class="rk"><span class="tg ${tag}">${{stay:'Stay',move:'Move',soon:'Soon',keep:'Keep',wait:'Wait'}[tag]}</span>${title}</div><div class="ra">${act}</div></div>`;
+  const okStay=[];
+  L.filter(c=>c.type==='instant').forEach(c=>{const g=bi?(bi.rate-c.rate)*c.balance*(1-tr(c.owner)):0;
+    if(g>=SWITCH_MIN) ex.push(item('move',`${esc(c.name)} <small>${gbpk(c.balance)} at ${pc(c.rate)}</small>`,`Move to <b>${esc(bi.provider)}</b> ${pc(bi.rate)}: +${gbp(g)} a year after tax.`));
+    else if(g>0) ex.push(item('stay',`${esc(c.name)} <small>${gbpk(c.balance)} at ${pc(c.rate)}</small>`,`Switching to the best rate gains only ${gbp(g)} a year after tax.`));
+    else okStay.push(esc(c.name.replace('Cahoot Sunny Day Saver','Sunny Day Saver')));});
+  if(okStay.length) ex.push(item('stay',okStay.join(', '),'Already above the best instant rate.'));
+  L.filter(c=>c.type==='fixed'&&dd(c.free)<=120).forEach(c=>{const g=b1&&bi?(b1.rate-bi.rate)*c.balance*(1-tr(c.owner)):0;
+    ex.push(item('soon',`${esc(c.name)} <small>${gbpk(c.balance)} frees ${fmtD(c.free)}</small>`,`Fix what isn't needed for a year at <b>${esc(b1.provider)}</b> (up to +${gbp(g)} a year after tax); the rest to instant.`));});
+  const lk=L.filter(c=>c.type==='fixed'&&dd(c.free)>120);
+  if(lk.length) ex.push(item('wait',lk.map(c=>esc(c.name.replace('Marcus 1-year fixed','Marcus fixed'))).join(', '),'Locked. Nothing to do until they mature.'));
+  const rl=L.filter(c=>c.type==='relief');
+  if(rl.length) ex.push(item('keep',`Charity Bank <small>${gbpk(sum(rl,c=>c.balance))}, Stuart</small>`,'5% a year off income tax beats any savings rate.'));
+  body.innerHTML=`<div class="cash">
+    <div class="kpis">${kpi('Savings',gbp(tot),`${C.length} accounts`)}${kpi('Available now',gbp(inst),share(inst/tot)+' of savings')}${kpi('Interest a year',gbp(intr),'average '+pc(wr))}</div>
+    <div class="ccol">
+      <section class="cb acc"><h3>Accounts <em><i class="od" style="background:var(--reeta)"></i>Reeta <i class="od" style="background:var(--stuart)"></i>Stuart</em></h3>
+        <div class="cr h"><span>Account</span><span>Rate</span><span>Balance</span><span>Available</span></div>${accRows}</section>
+      <section class="cb best"><h3>Best rates <em>FSCS banks only · ${rates?.asof?fmtD(rates.asof):'–'}${rates?.asof&&dd(rates.asof)<-45?' · out of date':''}</em></h3><div class="bgrid">${best}</div></section>
+    </div>
+    <div class="ccol">
+      <section class="cb rec"><h3>What to do</h3>
+        <div class="rh">New money</div>${nm.join('')}
+        <div class="rh">Accounts over £2,000</div>${ex.join('')}
+        <p class="rule">Switch only for £${SWITCH_MIN}+ a year after tax. Reeta: 20% tax on interest over £1,000.</p>
+      </section>
+
+    </div></div>`;
+  document.getElementById('note').textContent='';
+}
 function renderWrappers(rows){
   document.getElementById('cols').style.display='none'; document.getElementById('fchip').innerHTML='';
   document.getElementById('psum').textContent='Stuart and Reeta by value and share';
@@ -393,6 +505,7 @@ document.getElementById('exportBtn').onclick=()=>{
 
 (async()=>{
   load();
+  try{rates=await (await fetch('rates.json?'+Date.now(),{cache:'no-store'})).json();}catch{}
   try{prices=await (await fetch('prices.json?'+Date.now(),{cache:'no-store'})).json();
     const u=new Date(String(prices.updated).replace(' UTC','Z').replace(' ','T'));
     document.getElementById('asof').textContent='Prices '+(isNaN(u)?prices.updated:u.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}));}
