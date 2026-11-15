@@ -1,6 +1,6 @@
 {
  "asof": "2026-11-15",
- "source": "DepositScout and Be Clever With Your Cash, checked 15 Nov 2026. FSCS-protected UK banks only; Sharia and non-FSCS products excluded.",
+ "source": "DepositScout and Be Clever With Your Cash, checked 15 Nov 2026 (2-year updated). FSCS-protected UK banks only; Sharia and non-FSCS products excluded.",
  "categories": {
   "instant": [
    {
@@ -28,14 +28,14 @@
   ],
   "2y": [
    {
+    "provider": "Castle Trust",
+    "rate": 0.0531,
+    "note": "Castle Trust Bank 2 Year Fixed Rate e-Saver \u00b7 FSCS \u00b7 \u00a31,000 min"
+   },
+   {
     "provider": "Afin",
     "rate": 0.053,
     "note": "Afin Bank \u00b7 FSCS \u00b7 \u00a31,000 min"
-   },
-   {
-    "provider": "OakNorth",
-    "rate": 0.053,
-    "note": "FSCS"
    }
   ]
  }
