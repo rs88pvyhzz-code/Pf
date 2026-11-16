@@ -207,6 +207,31 @@ button:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
   .cols,.hr{grid-template-columns:20px minmax(0,1fr) 84px 64px;gap:0 8px}
   .cols>:nth-child(3),.hr>:nth-child(3),.cols>:nth-child(4),.hr>:nth-child(4),.cols>:nth-child(7),.hr>:nth-child(7){display:none}
   .ph{flex-wrap:wrap}
+  /* phone: total first, holdings next, summary cards after */
+  .app{display:flex;flex-direction:column;gap:12px;padding:12px}
+  .side{display:contents}
+  .side .head{order:1;margin:0} .panel{order:2} #accounts{order:3} #owners{order:4} #regions{order:5} .tools{order:6}
+  .side .head .total{font-size:40px;margin:4px 0 8px}
+  .chips{grid-template-columns:1fr 1fr}
+  .ph{padding:10px 12px 8px;gap:8px 12px}
+  .tabs{gap:16px;width:100%} .tabs button{font-size:20px}
+  .ph .sum{flex:1 1 100%;order:3}
+  .ph .sp{display:none}
+  #ownerSeg{order:2;width:100%} #ownerSeg button{flex:1;min-width:0}
+  .cols,.hr{padding:0 12px}
+  .hr{height:auto;min-height:48px;padding-top:5px;padding-bottom:5px}
+  .nm{white-space:normal;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .nm small{display:block;margin:1px 0 0}
+  /* by account: one column, drop share column */
+  .wrap{grid-template-columns:1fr;padding:10px}
+  .wr{grid-template-columns:minmax(0,1fr) 50px 50px 58px;gap:0 6px;font-size:12px}
+  .wr>:nth-child(5){display:none}
+  /* cash: one column */
+  .cash{grid-template-columns:1fr;padding:10px}
+  .kpis{gap:6px} .kpi{padding:6px 8px} .kpi b{font-size:16px} .kpi small{font-size:10.5px}
+  .acc .cr{grid-template-columns:minmax(0,1fr) 42px 66px 84px;gap:0 6px;font-size:12px}
+  .bgrid{grid-template-columns:1fr!important}
+  .acc .cr>:nth-child(4){line-height:1.15;padding:2px 0} .acc .cr>:nth-child(4) small{display:block;margin:0}
 }
 </style>
 </head>
@@ -429,7 +454,7 @@ function renderCash(){
     else if(g>0) ex.push(item('stay',`${esc(c.name)} <small>${gbpk(c.balance)} at ${pc(c.rate)}</small>`,`Switching to the best rate gains only ${gbp(g)} a year after tax.`));
     else okStay.push(esc(c.name.replace('Cahoot Sunny Day Saver','Sunny Day Saver')));});
   if(okStay.length) ex.push(item('stay',okStay.join(', '),'Already above the best instant rate.'));
-  L.filter(c=>c.type==='fixed'&&dd(c.free)<=120).forEach(c=>{const g=b1&&bi?(b1.rate-bi.rate)*c.balance*(1-tr(c.owner)):0;
+  L.filter(c=>c.type==='fixed'&&dd(c.free)<=120&&b1).forEach(c=>{const g=b1&&bi?(b1.rate-bi.rate)*c.balance*(1-tr(c.owner)):0;
     ex.push(item('soon',`${esc(c.name)} <small>${gbpk(c.balance)} frees ${fmtD(c.free)}</small>`,`Fix what isn't needed for a year at <b>${esc(b1.provider)}</b> (up to +${gbp(g)} a year after tax); the rest to instant.`));});
   const lk=L.filter(c=>c.type==='fixed'&&dd(c.free)>120);
   if(lk.length) ex.push(item('wait',lk.map(c=>esc(c.name.replace('Marcus 1-year fixed','Marcus fixed'))).join(', '),'Locked. Nothing to do until they mature.'));
