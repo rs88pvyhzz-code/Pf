@@ -59,12 +59,13 @@ def chart(sym):
 
 def main():
     out = {"updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-           "prices": {}, "fx": {}, "errors": []}
+           "prices": {}, "fx": {}, "errors": [], "failed": []}
     for s in TICKERS + FX:
         try:
             (out["fx"] if s in FX else out["prices"])[s] = chart(s)
         except Exception as e:  # keep going; old prices are kept below
             out["errors"].append(f"{s}: {e}")
+            out["failed"].append(s)  # app flags these: price carried over from an earlier run
         time.sleep(0.4)
     try:
         old = json.load(open("prices.json"))

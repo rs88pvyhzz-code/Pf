@@ -4,7 +4,11 @@ on:
     - cron: "*/30 7-21 * * 1-5"
     - cron: "45 16 * * 1-5"
   workflow_dispatch: {}
-  push: {} 
+  push:
+    branches: [main]
+concurrency:
+  group: update-prices
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:

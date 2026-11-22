@@ -95,6 +95,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 @media (prefers-color-scheme:dark){.own{color:#0E131D}}
 .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .nm small{color:var(--faint);font-weight:400;margin-left:6px;font-size:11.5px}
+.nm small.stale{color:#C2410C;font-weight:600}
 .tag{white-space:nowrap;font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px;justify-self:start}
 .hr:nth-child(even) .tag{background:var(--surface)}
 .w{display:flex;align-items:center;gap:6px}
@@ -321,6 +322,18 @@ const mv=(r,k)=>r.live&&r.base[k]!=null?r.now-r.base[k]:null;
 const acct=h=>['ISA','SIPP','GIA'].includes(h.account)?h.account:'other';
 const short=n=>{const m=n.match(/\(([^)]+)\)\s*$/);const base=n.replace(/\s*\([^)]*\)\s*$/,'');return {base,code:m?m[1].replace(/ price$/,''):''}};
 const sum=(rs,f)=>rs.reduce((s,r)=>s+(f(r)||0),0);
+// Flag a ticker whose price did not refresh this run, or whose last close is
+// more than 3 days older than the newest close in the file (allows for one-market holidays).
+function priceFlag(t){
+  const p=t&&prices?.prices?.[t]; if(!p) return null;
+  const bad=prices.failed||(prices.errors||[]).map(e=>String(e).split(':')[0]);
+  const failed=bad.includes(t)||(p.cur==='USD'&&bad.includes('GBPUSD=X'))||(p.cur==='EUR'&&bad.includes('EURGBP=X'));
+  const last=lastDate(), d=p.date?new Date(p.date+'T12:00:00'):null;
+  const old=last&&d&&(last-d)/864e5>3;
+  if(!failed&&!old) return null;
+  const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'unknown date';
+  return {date:ds, why:failed?'did not refresh':'stale'};
+}
 
 function lastDate(){
   if(!prices?.prices) return null;
@@ -403,7 +416,7 @@ function render(){
   body.innerHTML=view.map(r=>{
     const s=short(r.name), m=mv(r,period), p=m!=null&&r.base[period]?m/r.base[period]:null;
     return `<div class="hr"><span class="own ${r.owner}" title="${r.owner}">${r.owner[0]}</span>
-      <span class="nm">${esc(s.base)}${s.code?`<small>${esc(s.code)}</small>`:''}</span>
+      <span class="nm">${esc(s.base)}${s.code?`<small>${esc(s.code)}</small>`:''}${(f=>f?`<small class="stale" title="Price ${f.why} – last close ${f.date}">⚠ ${f.date}</small>`:'')(r.live&&priceFlag(r.ticker))}</span>
       <span class="tag">${esc(r.account==='Direct LP'?'LP':r.account)}</span>
       <span class="w"><span class="t"><span style="width:${r.now/tot/maxw*100}%"></span></span><em>${share(r.now/tot)}</em></span>
       <span class="r val">${gbp(r.now)}</span>
@@ -411,7 +424,11 @@ function render(){
       <span class="pill ${p==null?'flat':cls(m)}">${p==null?'–':pct2(p)}</span></div>`;}).join('');
   const stale=rows.filter(r=>r.ticker&&!r.live).map(r=>short(r.name).code||r.name);
   const n=document.getElementById('note');
-  if(!n.dataset.hold) n.textContent=stale.length?`No price for ${stale.join(', ')}; shown at ${since} value.`:'';
+  const flagged=rows.filter(r=>r.live&&priceFlag(r.ticker)).map(r=>{const f=priceFlag(r.ticker);return `${short(r.name).code||r.ticker} (${f.date})`});
+  const msgs=[];
+  if(stale.length) msgs.push(`No price for ${stale.join(', ')}; shown at ${since} value.`);
+  if(flagged.length) msgs.push(`Old price for ${[...new Set(flagged)].join(', ')} – latest fetch failed or market data lagging.`);
+  if(!n.dataset.hold){n.textContent=msgs.join(' ');n.classList.toggle('err',flagged.length>0);}
   requestAnimationFrame(sizeRows);
 }
 
